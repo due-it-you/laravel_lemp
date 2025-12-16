@@ -1,0 +1,38 @@
+services:
+  nginx:
+    image: nginx:1.29.4
+    ports:
+      - "8080:80"
+    volumes:
+      # 読み取り専用でpublicディレクトリをマウント
+      - ./src/public:/var/www/html/public:ro
+      # 設定ファイルをマウント
+      - ./docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - laravel_network
+  app:
+    build:
+      context: ./docker/php/
+    depends_on:
+      - mysql
+    volumes:
+      # Laravelのソースコードをマウント
+      - ./src:/var/www/html/
+    networks:
+      - laravel_network
+  mysql:
+    image: mysql:8.0 
+    restart: always
+    environment:
+      MYSQL_DATABASE: laravel_lamp_db
+      MYSQL_ROOT_PASSWORD: laravel_root_pass
+      MYSQL_USER: laravel_user
+      MYSQL_PASSWORD: laravel_user_pass
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - laravel_network
+volumes:
+  mysql_data:
+networks:
+  laravel_network:
