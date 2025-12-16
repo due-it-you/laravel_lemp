@@ -24,7 +24,7 @@ services:
     image: mysql:8.0 
     restart: always
     environment:
-      MYSQL_DATABASE: laravel_lamp_db
+      MYSQL_DATABASE: laravel_lemp_db
       MYSQL_ROOT_PASSWORD: laravel_root_pass
       MYSQL_USER: laravel_user
       MYSQL_PASSWORD: laravel_user_pass
